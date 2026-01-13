@@ -5,10 +5,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import {
-  brandingService,
-  type OrganizationConfig,
-} from "@/services/brandingService";
+import { brandingService } from "@/services/brandingService";
 
 interface BrandingContextType {
   orgName: string;

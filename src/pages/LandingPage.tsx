@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useBranding } from "@/context/BrandingContext";
 import {
@@ -26,8 +26,6 @@ const stagger = {
 const LandingPage = () => {
   const navigate = useNavigate();
   const { orgName, restaurantUrl } = useBranding();
-  const { scrollYProgress } = useScroll();
-  const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans overflow-x-hidden selection:bg-primary/30">

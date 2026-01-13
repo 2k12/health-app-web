@@ -31,7 +31,7 @@ import {
   ChevronsUpDown,
 } from "lucide-react";
 import { NutritionManager } from "@/components/nutrition/NutritionManager";
-import { useBranding } from "@/context/BrandingContext";
+
 import {
   Command,
   CommandEmpty,
@@ -50,7 +50,7 @@ import { cn } from "@/lib/utils";
 const TrainerUserDetailPage = () => {
   const { userId } = useParams<{ userId: string }>();
   const navigate = useNavigate();
-  const { primaryColor } = useBranding();
+  // const { primaryColor } = useBranding();
   const [user, setUser] = useState<AssignedUser | null>(null);
   const [exercisesList, setExercisesList] = useState<Exercise[]>([]);
   const [loading, setLoading] = useState(true);
@@ -95,7 +95,7 @@ const TrainerUserDetailPage = () => {
             if (typeof loadedDays === "string") {
               try {
                 loadedDays = JSON.parse(loadedDays);
-              } catch (e) {
+              } catch {
                 loadedDays = [];
               }
             }
@@ -119,7 +119,6 @@ const TrainerUserDetailPage = () => {
               const maxKey = keys.length > 0 ? keys[keys.length - 1] : 3;
 
               for (let i = 1; i <= maxKey; i++) {
-                // @ts-expect-error - legacy handling
                 const dayExercises = loadedDays[String(i)] || [];
                 const mappedExercises = Array.isArray(dayExercises)
                   ? dayExercises.map((ex: any) => {

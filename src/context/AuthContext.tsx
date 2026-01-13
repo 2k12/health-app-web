@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  ReactNode,
-} from "react";
+import { createContext, useContext, useState, type ReactNode } from "react";
 
 export interface User {
   id: string;
@@ -39,7 +33,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
     return null;
   });
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
 
   const login = (newToken: string, newUser: User) => {
     // Normalize role to Uppercase to match strict types

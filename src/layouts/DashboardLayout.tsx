@@ -15,7 +15,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
-import { NotificationCenter } from "@/components/NotificationCenter";
 import { useBranding } from "@/context/BrandingContext";
 
 const DashboardLayout = () => {

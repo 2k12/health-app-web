@@ -1,11 +1,8 @@
-import React from "react";
-import {
   Page,
   Text,
   View,
   Document,
   StyleSheet,
-  Font,
 } from "@react-pdf/renderer";
 
 // Register fonts if needed, otherwise use built-in Helvetica/Times

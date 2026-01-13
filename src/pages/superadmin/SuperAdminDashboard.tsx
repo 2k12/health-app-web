@@ -15,7 +15,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -48,7 +47,7 @@ export default function SuperAdminDashboard() {
       setLoading(true);
       const data = await organizationService.getAll();
       setOrgs(data);
-    } catch (error) {
+    } catch {
       toast.error("Error al cargar organizaciones");
     } finally {
       setLoading(false);

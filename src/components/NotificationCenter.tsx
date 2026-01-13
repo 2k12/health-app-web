@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { Notification } from "@/services/notificationService";
 import { notificationService } from "@/services/notificationService";
-import { cn } from "@/lib/utils";
+
 import { toast } from "sonner";
 
 export function NotificationCenter() {
@@ -43,7 +43,7 @@ export function NotificationCenter() {
         prev.map((n) => (n.id === id ? { ...n, read: true } : n))
       );
       setUnreadCount((prev) => Math.max(0, prev - 1));
-    } catch (error) {
+    } catch {
       toast.error("Error al marcar como leído");
     }
   };
@@ -54,7 +54,7 @@ export function NotificationCenter() {
       setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
       setUnreadCount(0);
       toast.success("Todas marcadas como leídas");
-    } catch (error) {
+    } catch {
       toast.error("Error al marcar todo como leído");
     }
   };
