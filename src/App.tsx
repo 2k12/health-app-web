@@ -70,12 +70,7 @@ function App() {
         <Router basename={basename}>
           <Routes>
             {/* Landing Page (Public) - mapped to root of the basename */}
-            <Route
-              path="/"
-              element={
-                orgSlug ? <Navigate to="/login" replace /> : <LandingPage />
-              }
-            />
+            <Route path="/" element={<LandingPage />} />
 
             {/* Public Routes */}
             <Route path="/login" element={<LoginPage />} />
