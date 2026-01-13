@@ -1,9 +1,4 @@
-  Page,
-  Text,
-  View,
-  Document,
-  StyleSheet,
-} from "@react-pdf/renderer";
+import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
 
 // Register fonts if needed, otherwise use built-in Helvetica/Times
 // Font.register({ family: 'Roboto', src: 'https://...' });
