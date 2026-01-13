@@ -5,22 +5,14 @@ import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
 
 interface FoodItem {
   id?: string;
-  name: string;
-  portion: string;
-  calories: number;
-  protein: number;
-  carbs: number;
-  fats: number;
   portionGram: number;
   food: {
     name: string;
     calories: number;
     protein: number;
     carbs: number;
-    fats: number; // Typo in interface, should match usage or vice versa.
-    // If backend sends 'fat', use 'fat'.
-    // NutritionManager interface says 'fat'.
     fat: number;
+    fats?: number;
   };
 }
 
@@ -35,6 +27,7 @@ interface Meal {
 interface DietPlan {
   id?: string;
   name?: string; // Made optional
+  dailyCalories?: number;
   description?: string;
   meals: Meal[];
 }
