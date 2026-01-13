@@ -160,7 +160,7 @@ export const brandingService = {
     console.log(`Fetching config for organization: ${slug}`);
 
     try {
-      const { data } = await api.get(`/organizations/public/${slug}`);
+      const { data } = await api.get(`/organization/config?slug=${slug}`);
       return data;
     } catch {
       console.warn("Org config fetch failed, using default.");
