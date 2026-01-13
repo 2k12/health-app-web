@@ -1,7 +1,9 @@
 import axios from "axios";
 
 const getBaseUrl = () => {
-  let url = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
+  let url =
+    import.meta.env.VITE_API_URL ||
+    "https://health-app-backend-production-6421.up.railway.app/api";
   if (!url.endsWith("/api")) {
     if (url.endsWith("/")) {
       url = url + "api";
