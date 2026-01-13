@@ -12,7 +12,7 @@ interface FoodItem {
     protein: number;
     carbs: number;
     fat: number;
-    fats?: number;
+    fats?: number; // Optional for compatibility
   };
 }
 
@@ -27,7 +27,7 @@ interface Meal {
 interface DietPlan {
   id?: string;
   name?: string; // Made optional
-  dailyCalories?: number;
+  dailyCalories?: number; // Added to match usage in NutritionManager
   description?: string;
   meals: Meal[];
 }
