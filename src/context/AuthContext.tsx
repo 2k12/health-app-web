@@ -5,7 +5,7 @@ export interface User {
   name: string;
   email: string;
   role: "USUARIO" | "ADMINISTRADOR" | "ENTRENADOR" | "SUPERADMIN";
-  profile?: any;
+  profile?: Record<string, unknown>;
 }
 
 export interface AuthContextType {
@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = (newToken: string, newUser: User) => {
     // Normalize role to Uppercase to match strict types
     if (newUser.role) {
-      newUser.role = newUser.role.toUpperCase() as any;
+      newUser.role = newUser.role.toUpperCase() as User["role"];
     }
 
     localStorage.setItem("token", newToken);

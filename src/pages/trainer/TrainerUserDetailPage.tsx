@@ -121,7 +121,7 @@ const TrainerUserDetailPage = () => {
               for (let i = 1; i <= maxKey; i++) {
                 const dayExercises = loadedDays[String(i)] || [];
                 const mappedExercises = Array.isArray(dayExercises)
-                  ? dayExercises.map((ex: any) => {
+                  ? dayExercises.map((ex: WorkoutExercise) => {
                       const match = exsData.find(
                         (e) =>
                           e.name.toLowerCase() === (ex.name || "").toLowerCase()

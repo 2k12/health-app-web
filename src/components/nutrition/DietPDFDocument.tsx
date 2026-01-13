@@ -1,7 +1,40 @@
 import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
 
-// Register fonts if needed, otherwise use built-in Helvetica/Times
+// Registered Font
 // Font.register({ family: 'Roboto', src: 'https://...' });
+
+interface FoodItem {
+  id?: string;
+  name: string;
+  portion: string;
+  calories: number;
+  protein: number;
+  carbs: number;
+  fats: number;
+  portionGram: number;
+  food: {
+    name: string;
+    calories: number;
+    protein: number;
+    carbs: number;
+    fats: number;
+  };
+}
+
+interface Meal {
+  id?: string;
+  day: string | number; // e.g., "Lunes" or 1
+  name: string; // e.g. "Desayuno"
+  time: string;
+  foods: FoodItem[];
+}
+
+interface DietPlan {
+  id?: string;
+  name: string;
+  description?: string;
+  meals: Meal[];
+}
 
 const styles = StyleSheet.create({
   page: {
@@ -128,10 +161,9 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
   },
   detailItem: {
-    fontSize: 9,
-    color: "#4B5563",
-    marginBottom: 4,
-    lineHeight: 1.4,
+    fontSize: 8,
+    color: "#6B7280",
+    marginTop: 2,
   },
   footer: {
     position: "absolute",
@@ -153,7 +185,7 @@ interface DietPDFProps {
   userGoal: string;
   currentWeight?: number;
   targetCalories: number;
-  dietPlan: any; // Using any for flexibility to match backend shape
+  dietPlan: DietPlan; // Typed interface
   organizationDetails?: string;
   primaryColor?: string;
 }
@@ -224,7 +256,7 @@ export const DietPDFDocument = ({
         <View style={styles.section}>
           {[1, 2, 3, 4, 5, 6, 7].map((day) => {
             const dayMeals =
-              dietPlan?.meals?.filter((m: any) => m.day === day) || [];
+              dietPlan?.meals?.filter((m: Meal) => m.day === day) || [];
             if (dayMeals.length === 0) return null;
 
             let dCals = 0;
@@ -232,13 +264,13 @@ export const DietPDFDocument = ({
             let dCarbs = 0;
             let dFat = 0;
 
-            dayMeals.forEach((m: any) =>
-              m.foods.forEach((f: any) => {
+            dayMeals.forEach((m: Meal) =>
+              m.foods.forEach((f: FoodItem) => {
                 const ratio = f.portionGram / 100;
                 dCals += f.food.calories * ratio;
                 dProt += f.food.protein * ratio;
                 dCarbs += f.food.carbs * ratio;
-                dFat += f.food.fat * ratio;
+                dFat += f.food.fats * ratio;
               })
             );
 
@@ -253,7 +285,7 @@ export const DietPDFDocument = ({
                     {Math.round(dCarbs)}g | F: {Math.round(dFat)}g
                   </Text>
                 </View>
-                {dayMeals.map((meal: any) => (
+                {dayMeals.map((meal: Meal) => (
                   <View key={meal.id} style={styles.mealRow}>
                     <Text style={styles.mealTitle}>
                       {meal.name}
@@ -267,7 +299,7 @@ export const DietPDFDocument = ({
                         {"  "}~
                         {Math.round(
                           meal.foods.reduce(
-                            (acc: number, f: any) =>
+                            (acc: number, f: FoodItem) =>
                               acc + (f.food.calories * f.portionGram) / 100,
                             0
                           )
@@ -275,7 +307,7 @@ export const DietPDFDocument = ({
                         kcal
                       </Text>
                     </Text>
-                    {meal.foods.map((f: any) => (
+                    {meal.foods.map((f: FoodItem) => (
                       <Text key={f.id} style={styles.foodItem}>
                         • {f.food.name}{" "}
                         <Text style={styles.foodPortion}>

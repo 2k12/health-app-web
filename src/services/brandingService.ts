@@ -29,10 +29,10 @@ const hexToHSL = (hex: string) => {
   g /= 255;
   b /= 255;
 
-  let cmin = Math.min(r, g, b),
+  const cmin = Math.min(r, g, b),
     cmax = Math.max(r, g, b),
-    delta = cmax - cmin,
-    h = 0,
+    delta = cmax - cmin;
+  let h = 0,
     s = 0,
     l = 0;
 
@@ -54,41 +54,124 @@ const hexToHSL = (hex: string) => {
 };
 
 export const brandingService = {
-  fetchConfig: async (): Promise<OrganizationConfig> => {
-    // 1. Check URL path for /org/:slug
-    const pathMatch = window.location.pathname.match(/^\/org\/([^/]+)/);
-    let slug = pathMatch ? pathMatch[1] : null;
+  hexToRgb: (hex: string) => {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result
+      ? {
+          r: parseInt(result[1], 16),
+          g: parseInt(result[2], 16),
+          b: parseInt(result[3], 16),
+        }
+      : null;
+  },
 
-    // 2. Check query param (fallback/legacy)
+  // Helper to generate a lighter/darker shade
+  adjustColor: (hex: string, lum: number) => {
+    // Validate hex string
+    hex = String(hex).replace(/[^0-9a-f]/gi, "");
+    if (hex.length < 6) {
+      hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+    }
+    lum = lum || 0;
+
+    // Convert to decimal and change luminosity
+    let rgb = "#",
+      c,
+      i;
+    for (i = 0; i < 3; i++) {
+      c = parseInt(hex.substr(i * 2, 2), 16);
+      c = Math.round(Math.min(Math.max(0, c + c * lum), 255)).toString(16);
+      rgb += ("00" + c).substr(c.length);
+    }
+    return rgb;
+  },
+
+  calculateContrast: (hex: string) => {
+    const r = parseInt(hex.substr(1, 2), 16);
+    const g = parseInt(hex.substr(3, 2), 16);
+    const b = parseInt(hex.substr(5, 2), 16);
+    return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? "#000000" : "#ffffff";
+  },
+
+  // Calculate relative luminance for WCAG contrast
+  getLuminance: (hex: string) => {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    if (!result) return 0;
+
+    // Convert to sRGB
+    const r = parseInt(result[1], 16) / 255;
+    const g = parseInt(result[2], 16) / 255;
+    const b = parseInt(result[3], 16) / 255;
+
+    // Helper for sRGB transform
+    const transform = (v: number) =>
+      v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+
+    return (
+      0.2126 * transform(r) + 0.7152 * transform(g) + 0.0722 * transform(b)
+    );
+  },
+
+  // Calculate contrast ratio between two colors
+  getContrastRatio: (color1: string, color2: string) => {
+    const l1 = brandingService.getLuminance(color1);
+    const l2 = brandingService.getLuminance(color2);
+    const lighter = Math.max(l1, l2);
+    const darker = Math.min(l1, l2);
+    return (lighter + 0.05) / (darker + 0.05);
+  },
+
+  // Check if color has sufficient contrast against white (e.g. for text)
+  // WCAG AA for normal text is 4.5:1
+  hasSufficientContrast: (hex: string, threshold = 4.5) => {
+    return brandingService.getContrastRatio(hex, "#ffffff") >= threshold;
+  },
+
+  fetchConfig: async (): Promise<OrganizationConfig> => {
+    let slug = "";
+
+    // 1. Try to get from URL path (subdomain logic simulation)
+    const pathParts = window.location.pathname.split("/");
+    // Example: /org/my-gym/login
+    const orgIndex = pathParts.indexOf("org");
+    if (orgIndex !== -1 && pathParts[orgIndex + 1]) {
+      slug = pathParts[orgIndex + 1];
+    }
+
+    // 2. Try to get from query params
     if (!slug) {
       const params = new URLSearchParams(window.location.search);
-      slug = params.get("org");
+      const orgParam = params.get("org");
+      if (orgParam) slug = orgParam;
     }
 
     // 3. Default to "vitality" if nothing found, unless it's explicitly "superadmin" or "landing"
-    if (!slug) {
-      // If we are at root or something else, defaults to vitality?
-      // User said: "lo principal se va a llamar vitality"
+    if (!slug || slug === "/") {
+      slug = "vitality";
+    }
+
+    // Skip for known routes that aren't org-specific if needed
+    if (slug === "superadmin" || slug === "landing") {
+      // Should we return null? or default?
+      // Let's return default for now to have branding
       slug = "vitality";
     }
 
     console.log(`Fetching config for organization: ${slug}`);
 
     try {
-      const response = await api.get<OrganizationConfig>(
-        `/organization/config?slug=${slug}`
-      );
-      return response.data;
-    } catch (error) {
+      const { data } = await api.get(`/organizations/public/${slug}`);
+      return data;
+    } catch {
       console.warn("Org config fetch failed, using default.");
       return {
         id: "default",
-        name: "Vitality Health",
+        name: "Vitality",
         slug: "vitality",
         primaryColor: "#10B981",
         secondaryColor: "#1F2937",
-        logoUrl: null,
-        restaurantUrl: null,
+        logoUrl: "/vitality-logo.svg",
+        restaurantUrl: null, // Set a specific URL here if the user has one provided in previous context, otherwise null is safer until configured
       };
     }
   },
