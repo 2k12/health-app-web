@@ -17,7 +17,10 @@ interface FoodItem {
     calories: number;
     protein: number;
     carbs: number;
-    fats: number;
+    fats: number; // Typo in interface, should match usage or vice versa.
+    // If backend sends 'fat', use 'fat'.
+    // NutritionManager interface says 'fat'.
+    fat: number;
   };
 }
 
@@ -25,13 +28,13 @@ interface Meal {
   id?: string;
   day: string | number; // e.g., "Lunes" or 1
   name: string; // e.g. "Desayuno"
-  time: string;
+  time?: string; // made optional
   foods: FoodItem[];
 }
 
 interface DietPlan {
   id?: string;
-  name: string;
+  name?: string; // Made optional
   description?: string;
   meals: Meal[];
 }
@@ -270,7 +273,7 @@ export const DietPDFDocument = ({
                 dCals += f.food.calories * ratio;
                 dProt += f.food.protein * ratio;
                 dCarbs += f.food.carbs * ratio;
-                dFat += f.food.fats * ratio;
+                dFat += f.food.fat * ratio;
               })
             );
 
