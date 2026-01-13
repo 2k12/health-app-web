@@ -170,7 +170,7 @@ export const brandingService = {
         slug: "vitality",
         primaryColor: "#10B981",
         secondaryColor: "#1F2937",
-        logoUrl: "/fit-logo.svg",
+        logoUrl: "/fyb.svg",
         restaurantUrl: null, // Set a specific URL here if the user has one provided in previous context, otherwise null is safer until configured
       };
     }
