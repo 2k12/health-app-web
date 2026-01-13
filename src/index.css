@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Silver & White Palette - Light Mode (Default) */
+    --background: 0 0% 98%; /* Off-white #FAFAFA */
+    --foreground: 240 10% 3.9%; /* Deep Gray #09090b */
+
+    --card: 0 0% 100%; /* Pure White #FFFFFF */
+    --card-foreground: 240 10% 3.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+
+    /* "Vitality F&B" Brand Colors - Emerald Green Identity */
+    --primary: 151 55% 42%; /* Emerald-600 #10B981 equivalent */
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 220 14% 94%; /* Light Silver/Gray #F0F2F5 */
+    --secondary-foreground: 240 5.9% 10%;
+
+    --muted: 220 14.3% 94%;
+    --muted-foreground: 220 8.9% 46.1%;
+
+    --accent: 220 14% 94%;
+    --accent-foreground: 240 5.9% 10%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 220 13% 91%; /* Light Gray border */
+    --input: 220 13% 91%;
+    --ring: 220 5% 20%; /* Lead ring */
+
+    --radius: 0.75rem; /* Slightly more rounded for modern feel */
+  }
+
+  .dark {
+    /* Deep Lead/Dark Silver Palette */
+    --background: 224 7% 12%; /* Dark Lead #1C1E21 */
+    --foreground: 0 0% 98%;
+
+    --card: 224 7% 15%; /* Slightly lighter lead */
+    --card-foreground: 0 0% 98%;
+
+    --popover: 224 7% 15%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 151 55% 42%; /* Emerald Consistent in Dark Mode for Brand Identity, or lighter 151 65% 52% */
+    --primary: 151 65% 52%; /* Emerald-500 */
+    --primary-foreground: 144 65% 5%; /* Very dark green ink */
+
+    --secondary: 217 19% 27%; /* Dark Gray */
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 217 19% 27%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217 19% 27%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 217 19% 27%;
+    --input: 217 19% 27%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
